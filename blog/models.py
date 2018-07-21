@@ -39,6 +39,15 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tag, blank=True, help_text='文章的标签')
     author = models.ForeignKey(User, help_text='文章的作者')
 
+    views = models.PositiveIntegerField(default=0, help_text='文章阅读量')
+
+    # 设置文章阅读量统计函数，每浏览一次，阅读量加1
+    def increase_views(self):
+        # 每被调用一次，阅读量加1
+        self.views += 1
+        # 更新保存到数据库
+        self.save(update_fields=['views'])
+
     def __str__(self):
         return self.title
 

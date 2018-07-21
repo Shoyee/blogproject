@@ -16,6 +16,10 @@ def index(request):
 # 文章详情页面函数
 def detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+
+    # 浏览详情页，调用函数，使文章阅读量加1
+    post.increase_views()
+
     post.body = markdown.markdown(post.body,
                                   extensions=[
                                       'markdown.extensions.extra',
