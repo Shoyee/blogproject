@@ -44,3 +44,7 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'pk': self.pk})
+
+    # 定义一个Meta类，指定post对象的排列顺序为先按照created_time的逆序排列,相同的对象再按照title的正序排列
+    class Meta:
+        ordering = ['-created_time', 'title']
