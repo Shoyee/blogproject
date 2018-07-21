@@ -2,6 +2,8 @@ import markdown
 from django.shortcuts import render, get_object_or_404
 from .models import Post, Category
 
+from comments.forms import CommentForm
+
 # Create your views here.
 
 # 首页信息页面函数
@@ -20,8 +22,13 @@ def detail(request, pk):
                                       'markdown.extensions.codehilite',
                                       'markdown.extensions.toc',
                                   ])
+
+    form = CommentForm()
+    comment_list = post.comment_set.all()
     return render(request, 'blog/detail.html', context={
         'post': post,
+        'form': form,
+        'comment_list': comment_list,
     })
 
 # 归档分类信息列表显示函数
