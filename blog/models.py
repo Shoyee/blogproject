@@ -4,6 +4,8 @@ from django.urls import reverse
 from django.utils.six import python_2_unicode_compatible
 import pytz
 from django.utils.timezone import now
+from django.utils.html import strip_tags
+import markdown
 
 # Create your models here.
 
@@ -57,3 +59,17 @@ class Post(models.Model):
     # 定义一个Meta类，指定post对象的排列顺序为先按照created_time的逆序排列,相同的对象再按照title的正序排列
     class Meta:
         ordering = ['-created_time', 'title']
+
+    # 如果没有填写摘要，自动生成摘要信息
+    def save(self, *args, **kwargs):
+        if not self.excerpt:
+            # 先markdown渲染文本内容
+            md = markdown.Markdown(extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite',
+            ])
+            # 先渲染文本内容，再去除去文本两边的标签，然后再取前30个字
+            self.excerpt = strip_tags(md.convert(self.body))[:50]
+
+        # 继承父类的save方法，保存文章对象时，将自动生成的摘要保存到数据库中
+        super(Post, self).save(*args, **kwargs)
