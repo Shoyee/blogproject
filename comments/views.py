@@ -19,14 +19,17 @@ def post_comment(request, post_pk):
         if form.is_valid():
             # 如果数据格式正确，生成Comment实例化对象，作为评论数据，但是，暂时先不commit提交到数据库中
             comment = form.save(commit=False)
+
             # 把comment的post与post关联起来
             comment.post = post
+
             # 然后再保存并提交到数据库中(django的save方法是默认commit=True的，也就是保存的同时，如果不设置为False，则自动提交到数据库中)
             comment.save()
 
             # 当redirect 函数接收一个模型的实例时，它会调用这个Post模型实例post的 get_absolute_url 方法,
             # 重定向到 post的 get_absolute_url 方法返回的 URL，也就是当前post对象的详情页
             return redirect(post)
+
         else:
             # 如果输入的数据格式不合法，则重新渲染模板，返回对应的页面
             # 获取文章下面的评论列表

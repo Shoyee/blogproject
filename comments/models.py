@@ -4,6 +4,7 @@ from django.utils.six import python_2_unicode_compatible
 # Create your models here.
 # 装饰器用于兼容python2版本
 # 构建评论数据表
+@python_2_unicode_compatible
 class Comment(models.Model):
     name = models.CharField(max_length=100, help_text='评论者的姓名')
     email = models.EmailField(max_length=255, help_text='评论者的邮箱')
