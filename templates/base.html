@@ -24,9 +24,9 @@
     <script src="{% static 'blog/js/modernizr.custom.js' %}"></script>
 </head>
 
-<body>
+<body style="background-color: greenyellow;">
 <div class="container">
-    <header id="site-header">
+    <header id="site-header" style="background-color: #00aaaa;">
         <div class="row">
             <div class="col-md-4 col-sm-5 col-xs-8">
                 <div class="logo">
@@ -76,26 +76,26 @@
             <aside class="col-md-4">
                 {% block toc %}
                 {% endblock toc %}
-                <div class="widget widget-recent-posts">
+                <div class="widget widget-recent-posts" style="background-color: pink;">
                     <h3 class="widget-title">最新文章</h3>
                     {% get_recent_posts as recent_post_list %}
                     <ul>
                         {% for post in recent_post_list %}
                         <li>
-                            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                            <a href="{{ post.get_absolute_url }}">《{{ post.title }}》  {{ post.created_time.month }}月{{ post.created_time.day }}日</a>
                         </li>
                         {% empty %}
                             暂无最新文章！
                         {% endfor %}
                     </ul>
                 </div>
-                <div class="widget widget-archives">
+                <div class="widget widget-archives" style="background-color: pink;">
                     <h3 class="widget-title">归档</h3>
                     {% archives as date_list %}
                     <ul>
                         {% for date in date_list %}
                         <li>
-                            <a href="#">{{ date.year }} 年 {{ date.month }} 月</a>
+                            <a href="{% url 'blog:archives' date.year date.month %}">{{ date.year }} 年 {{ date.month }} 月</a>
                         </li>
                         {% empty %}
                             暂无归档文章！
@@ -103,7 +103,7 @@
                     </ul>
                 </div>
 
-                <div class="widget widget-category">
+                <div class="widget widget-category" style="background-color: pink;">
                     <h3 class="widget-title">分类</h3>
                     {% get_categories as category_list %}
                     <ul>
@@ -117,7 +117,7 @@
                     </ul>
                 </div>
 
-                <div class="widget widget-tag-cloud">
+                <div class="widget widget-tag-cloud" style="background-color: pink;">
                     <h3 class="widget-title">标签云</h3>
                     <ul>
                         <li>
@@ -153,7 +153,7 @@
                     </ul>
                 </div>
                 <div class="rss">
-                    <a href=""><span class="ion-social-rss-outline"></span> RSS 订阅</a>
+                    <a href="" style="background-color: palegreen"><span class="ion-social-rss-outline"></span> RSS 订阅</a>
                 </div>
             </aside>
         </div>
