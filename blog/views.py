@@ -14,26 +14,61 @@ class IndexView(ListView):
     context_object_name = 'post_list'
 
 # 文章详情页面函数
-def detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+# def detail(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#
+#     # 浏览详情页，调用函数，使文章阅读量加1
+#     post.increase_views()
+#
+#     post.body = markdown.markdown(post.body,
+#                                   extensions=[
+#                                       'markdown.extensions.extra',
+#                                       'markdown.extensions.codehilite',
+#                                       'markdown.extensions.toc',
+#                                   ])
+#
+#     form = CommentForm()
+#     comment_list = post.comment_set.all()
+#     return render(request, 'blog/detail.html', context={
+#         'post': post,
+#         'form': form,
+#         'comment_list': comment_list,
+#     })
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/detail.html'
+    context_object_name = 'post'
 
-    # 浏览详情页，调用函数，使文章阅读量加1
-    post.increase_views()
+    # 重写get方法是为了在获取文章详情的时候，阅读量+1
+    def get(self, request, *args, **kwargs):
+        response = super(PostDetailView, self).get(request, *args, **kwargs)
 
-    post.body = markdown.markdown(post.body,
-                                  extensions=[
-                                      'markdown.extensions.extra',
-                                      'markdown.extensions.codehilite',
-                                      'markdown.extensions.toc',
-                                  ])
+        self.object.increase_views()
 
-    form = CommentForm()
-    comment_list = post.comment_set.all()
-    return render(request, 'blog/detail.html', context={
-        'post': post,
-        'form': form,
-        'comment_list': comment_list,
-    })
+        return response
+
+    # 重写get_object方法是为了获取文章内容并进行markdown格式渲染
+    def get_object(self, queryset=None):
+        post = super(PostDetailView, self).get_object(queryset=None)
+        post.body = markdown.markdown(post.body,
+                                      extensions=[
+                                          'markdown.extensions.extra',
+                                          'markdown.extensions.codehilite',
+                                          'markdown.extensions.toc',
+                                      ])
+        return post
+
+    # 重写get_context_data方法是为了将评论表单、文章下面的评论列表等信息传递给模板
+    def get_context_data(self, **kwargs):
+        context = super(PostDetailView, self).get_context_data(**kwargs)
+        form = CommentForm()
+        comment_list = self.object.comment_set.all()
+        context.update({
+            'form': form,
+            'comment_list': comment_list,
+        })
+        return context
+
 
 # 归档分类信息列表显示类视图函数
 # def archives(request, year, month):
