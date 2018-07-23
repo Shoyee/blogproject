@@ -12,6 +12,8 @@ class IndexView(ListView):
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'post_list'
+    # 实现分页功能，每页展示5篇文章
+    paginate_by = 5
 
 # 文章详情页面函数
 # def detail(request, pk):
