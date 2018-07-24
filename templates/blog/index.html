@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 
 {% block main %}
+    {% if error_msg %}
+        <p>{{ error_msg }}</p>
+    {% endif %}
+
     {% for post in post_list %}
                 <article class="post post-{{ post.pk }}">
                     <header class="entry-header">
@@ -24,7 +28,7 @@
                     </div>
                 </article>
             {% empty %}
-                <div class="no-post">暂时还没有发布的博客文章！</div>
+                <div class="no-post">暂时还没有相关已发布的博客文章！</div>
             {% endfor %}
 {#                简单分页效果#}
 {#            {% if is_paginated %}#}

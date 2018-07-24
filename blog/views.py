@@ -9,6 +9,8 @@ from comments.forms import CommentForm
 from django.utils.text import slugify
 from markdown.extensions.toc import TocExtension
 
+from django.db.models import Q
+
 # Create your views here.
 
 # 首页信息页面类视图函数
@@ -232,3 +234,22 @@ class UserView(IndexView):
     def get_queryset(self):
         user = get_object_or_404(User, pk=self.kwargs.get('pk'))
         return super(UserView, self).get_queryset().filter(author=user)
+
+
+# 定义全局文章搜索函数
+def search(request):
+    q = request.GET.get('q')
+    error_msg = ''
+
+    if not q:
+        error_msg = '请输入搜索关键词'
+        return render(request, 'blog/index.html',
+                      context={
+                          'error_msg': error_msg,
+                      })
+    post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q) | Q(author__username__icontains=q) | Q(category__name__icontains=q) | Q(tags__name__icontains=q))
+    return render(request, 'blog/index.html',
+                  context={
+                      'error_msg': error_msg,
+                      'post_list': post_list,
+                  })
