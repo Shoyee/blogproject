@@ -11,6 +11,11 @@
                 <span class="post-author"><a href="{% url 'blog:author' post.author_id %}">{{ post.author.username }}</a></span>
                 <span class="comments-link"><a href="#post_comment">{{ post.comment_set.count }} 评论</a></span>
                 <span class="views-count"><a href="#">{{ post.views }} 阅读</a></span>
+                <p>
+                    {% for tag in post.tags.all %}
+                        <span class="views-count" style="color: #0f140f">标签：<a href="{% url 'blog:tag' tag.pk %}">[{{ tag.name }}]</a></span>
+                    {% endfor %}
+                </p>
             </div>
         </header>
         <div class="entry-content clearfix">
