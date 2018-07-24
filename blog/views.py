@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 
 from comments.forms import CommentForm
 
+from django.utils.text import slugify
+from markdown.extensions.toc import TocExtension
+
 # Create your views here.
 
 # 首页信息页面类视图函数
@@ -151,12 +154,31 @@ class PostDetailView(DetailView):
     # 重写get_object方法是为了获取文章内容并进行markdown格式渲染
     def get_object(self, queryset=None):
         post = super(PostDetailView, self).get_object(queryset=None)
-        post.body = markdown.markdown(post.body,
-                                      extensions=[
+        md = markdown.Markdown(extensions=[
                                           'markdown.extensions.extra',
                                           'markdown.extensions.codehilite',
                                           'markdown.extensions.toc',
                                       ])
+
+        # 文章内容的标题被设置了锚点，
+        # 点击目录中的某个标题，页面就会跳到该文章内容中标题所在的位置，
+        # 这时候浏览器的 URL 显示的值可能不太美观，比如像下面的样子：
+        # http://127.0.0.1:8000/post/8/#_3
+        # Markdown 在设置锚点时利用的是标题的值，
+        # 由于通常我们的标题都是中文，Markdown 没法处理，
+        # 所以它就忽略的标题的值，而是简单地在后面加了个 _1 这样的锚点值。
+        # 为了解决这一个问题，我们需要修改一下传给 extentions 的参数，其具体做法如下：
+
+        TocExtension(slugify=slugify)
+
+        # extensions 中的 toc 拓展不再是字符串 markdown.extensions.toc ，而是 TocExtension 的实例。
+        # TocExtension 在实例化时其 slugify 参数可以接受一个函数作为参数，这个函数将被用于处理标题的锚点值。
+        # Markdown 内置的处理方法不能处理中文标题，所以我们使用了 django.utils.text 中的 slugify 方法，该方法可以很好地处理中文。
+        # 这时候标题的锚点 URL 变得好看多了:
+        # http://127.0.0.1:8000/post/8/#在文中插入目录
+
+        post.body = md.convert(post.body)
+        post.toc = md.toc
         return post
 
     # 重写get_context_data方法是为了将评论表单、文章下面的评论列表等信息传递给模板
