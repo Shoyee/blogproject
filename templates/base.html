@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Black &amp; White</title>
+    <title>博客天地</title>
 
     <!-- meta -->
     <meta charset="UTF-8">
@@ -30,7 +30,7 @@
         <div class="row">
             <div class="col-md-4 col-sm-5 col-xs-8">
                 <div class="logo">
-                    <h1><a href="{% url 'blog:index' %}"><b>Black</b> &amp; White</a></h1>
+                    <h1><a href="{% url 'blog:index' %}"><b>>>>博客天地</b></a></h1>
                 </div>
             </div><!-- col-md-4 -->
             <div class="col-md-8 col-sm-7 col-xs-4">
@@ -109,7 +109,7 @@
                     <ul>
                         {% for category in category_list %}
                         <li>
-                            <a href="{% url 'blog:category' category.pk %}">{{ category.name }} <span class="post-count">(13)</span></a>
+                            <a href="{% url 'blog:category' category.pk %}">{{ category.name }} <span class="post-count"> ({{ category.num_posts }} 篇文章)</span></a>
                         </li>
                         {% empty %}
                             暂无分类信息！
@@ -119,37 +119,15 @@
 
                 <div class="widget widget-tag-cloud" style="background-color: pink;">
                     <h3 class="widget-title">标签云</h3>
+                    {% get_tags as tag_list %}
                     <ul>
+                        {% for tag in tag_list %}
                         <li>
-                            <a href="#">Django</a>
+                            <a href="{% url 'blog:tag' tag.pk %}">{{ tag.name }} ({{ tag.num_posts }}篇)</a>
                         </li>
-                        <li>
-                            <a href="#">Python</a>
-                        </li>
-                        <li>
-                            <a href="#">Java</a>
-                        </li>
-                        <li>
-                            <a href="#">笔记</a>
-                        </li>
-                        <li>
-                            <a href="#">文档</a>
-                        </li>
-                        <li>
-                            <a href="#">AngularJS</a>
-                        </li>
-                        <li>
-                            <a href="#">CSS</a>
-                        </li>
-                        <li>
-                            <a href="#">JavaScript</a>
-                        </li>
-                        <li>
-                            <a href="#">Snippet</a>
-                        </li>
-                        <li>
-                            <a href="#">jQuery</a>
-                        </li>
+                        {% empty %}
+                            暂无标签信息！
+                        {% endfor %}
                     </ul>
                 </div>
                 <div class="rss">
@@ -165,7 +143,7 @@
             <div class="col-md-12">
                 <p class="copyright">&copy 2018 - 采集自<a href="http://www.cssmoban.com/"
                                                         target="_blank" title="模板之家">模板之家</a>
-                    - 由<a href="https://github.com/Shoyee/" title="网页模板" target="_blank">Shoyee</a>修改
+                    - 由<a href="https://github.com/Shoyee/blogproject" title="网页模板" target="_blank">Shoyee</a>修改
                 </p>
             </div>
         </div>

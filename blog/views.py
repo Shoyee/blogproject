@@ -1,7 +1,8 @@
 import markdown
 from django.shortcuts import render, get_object_or_404
-from .models import Post, Category
+from .models import Post, Category, Tag
 from django.views.generic import ListView, DetailView
+from django.contrib.auth.models import User
 
 from comments.forms import CommentForm
 
@@ -197,3 +198,15 @@ class CategoryView(IndexView):
     def get_queryset(self):
         cate = get_object_or_404(Category, pk=self.kwargs.get('pk'))
         return super(CategoryView, self).get_queryset().filter(category=cate)
+
+# 标签信息列表显示类视图函数
+class TagView(IndexView):
+    def get_queryset(self):
+        tag = get_object_or_404(Tag, pk=self.kwargs.get('pk'))
+        return super(TagView, self).get_queryset().filter(tags=tag)
+
+# 作者下面的文章展示类视图函数
+class UserView(IndexView):
+    def get_queryset(self):
+        user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        return super(UserView, self).get_queryset().filter(author=user)

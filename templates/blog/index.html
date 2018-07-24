@@ -8,10 +8,10 @@
                             <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
                         </h1>
                         <div class="entry-meta">
-                            <span class="post-category"><a href="#">{{ post.category.name }}</a></span>
+                            <span class="post-category"><a href="{% url 'blog:category' post.category_id %}">{{ post.category.name }}</a></span>
                             <span class="post-date"><a href="#"><time class="entry-date"
                                                                       datetime="2012-11-09T23:15:57+00:00">{{ post.created_time }}</time></a></span>
-                            <span class="post-author"><a href="#">{{ post.author.username }}</a></span>
+                            <span class="post-author"><a href="{% url 'blog:author' post.author_id %}">{{ post.author.username }}</a></span>
                             <span class="comments-link"><a href="{% url 'blog:detail' post.pk %}#post_comment">{{ post.comment_set.count }} 评论</a></span>
                             <span class="views-count"><a href="{% url 'blog:detail' post.pk %}">{{ post.views }} 阅读</a></span>
                         </div>
