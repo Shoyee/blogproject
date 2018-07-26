@@ -247,7 +247,8 @@ def search(request):
                       context={
                           'error_msg': error_msg,
                       })
-    post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q) | Q(author__username__icontains=q) | Q(category__name__icontains=q) | Q(tags__name__icontains=q))
+    post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q) | Q(author__username__icontains=q) | Q(category__name__icontains=q) | Q(tags__name__icontains=q)).distinct()
+    
     return render(request, 'blog/index.html',
                   context={
                       'error_msg': error_msg,
