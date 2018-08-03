@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from blog.models import Post
+from django.views.decorators.cache import cache_page
 
 from .models import Comment
 from .forms import CommentForm
@@ -7,6 +8,8 @@ from .forms import CommentForm
 # Create your views here.
 
 # 发布评论函数
+# 添加缓存页面装饰器，设置缓存时间为60秒
+@cache_page(60)
 def post_comment(request, post_pk):
     # 先获取博客文章
     post = get_object_or_404(Post, pk=post_pk)

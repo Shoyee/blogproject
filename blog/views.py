@@ -140,6 +140,7 @@ class IndexView(ListView):
 #         'form': form,
 #         'comment_list': comment_list,
 #     })
+
 class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/detail.html'
